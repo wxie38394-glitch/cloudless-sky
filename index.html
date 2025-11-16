@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>晴空网站</title>
+  <style>
+    body { 
+      font-family: "微软雅黑", sans-serif; 
+      background-color: #000000; 
+      color: white; 
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+      min-height: 100vh; 
+      position: relative;
+    }
+    h1 {
+      background: linear-gradient(to right, #ff00ff, #00ffff, #ffff00); 
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-top: 50px;
+      font-size: 36px;
+    }
+    p {
+      color: #f0f0f0; 
+      font-size: 16px;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .color-text {
+      background: linear-gradient(to right, #ff4d4d, #4dff4d, #4d4dff); 
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+    .run-time {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 14px;
+      color: #ffffff;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+  <script>
+    // 从本地存储读取已保存的创建时间（退出再进不丢失）
+    let createTime = localStorage.getItem('siteCreateTime');
+    // 首次打开页面时，保存当前时间到本地存储
+    if (!createTime) {
+      createTime = new Date().getTime(); // 存储时间戳（毫秒）
+      localStorage.setItem('siteCreateTime', createTime);
+    } else {
+      createTime = Number(createTime); // 转换为数字类型
+    }
+
+    // 实时计算累计运行时长
+    function updateTotalRuntime() {
+      const now = new Date().getTime();
+      const totalMs = now - createTime;
+
+      // 转换为 天:时:分:秒
+      const days = Math.floor(totalMs / 86400000).toString().padStart(2, '0');
+      const hours = Math.floor((totalMs % 86400000) / 3600000).toString().padStart(2, '0');
+      const minutes = Math.floor((totalMs % 3600000) / 60000).toString().padStart(2, '0');
+      const seconds = Math.floor((totalMs % 60000) / 1000).toString().padStart(2, '0');
+
+      document.getElementById('run-time').textContent = `网站运行时长：${days}天 ${hours}:${minutes}:${seconds}`;
+    }
+
+    // 页面加载即启动计时，每秒更新
+    window.onload = function() {
+      updateTotalRuntime();
+      setInterval(updateTotalRuntime, 1000);
+    };
+  </script>
+</head>
+<body>
+  <div class="run-time" id="run-time"></div>
+  
+  <h1>欢迎来到晴空网站</h1>
+  <p><span class="color-text">作者晴空</span></p>
+  <p><span class="color-text">2000</span></p>
+</body>
+</html>
